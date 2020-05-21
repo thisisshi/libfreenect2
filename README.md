@@ -277,3 +277,32 @@ write a working driver without the use of hacks and workarounds.
 Currently, video output from the kinect works fine and we're able to get all four outputs, including
 the depth output via infrared. In the future, it would be optimal to utilize this when masking
 people in front of the camera to support better virtual backgrounds.
+
+To get started and running with the rgb only output:
+
+```shell
+$ git clone https://github.com/thisisshi/libfreenect2/tree/rgb-only#modifications
+$ cd libfreenect2
+$ brew update
+$ brew install libusb
+$ brew install glfw3
+$ brew install jpeg-turbo
+$ mkdir build && cd build
+$ cmake ..
+$ make
+$ make install
+$ ./bin/Protonect -onlyrgb
+```
+
+From there, install OBS and the obs-mac-virtualcam package. You can just go to the releases
+for the repo and downloaded the latest pkg file and run it. 
+
+Open OBS, and add a new Video Capture Source for the virtual webcam. Add another source to
+capture the Protonect window and then go to Tools -> Start Virtual Camera.
+
+Open Photo Booth to confirm that the virtual camera is working.
+
+If you want to enable Zoom support, create a new entitlements.xml file and include the plist
+that was found in the comment above. Then sign your zoom app with the new entitlements.
+
+Open Zoom and select Preferences -> Video to confirm that it works.
