@@ -162,8 +162,14 @@ bool Viewer::render()
 
         // Using the frame buffer size to account for screens where window.size != framebuffer.size, e.g. retina displays
         glfwGetFramebufferSize(window, &fb_width, &fb_height);
-        fb_width_half = (fb_width + 1) / 2;
-        fb_height_half = (fb_height + 1) / 2;
+        if (iter->first == "ONLYRGB") {
+          fb_width_half = fb_width;
+          fb_height_half = fb_height;
+        }
+        else {
+          fb_width_half = (fb_width + 1) / 2;
+          fb_height_half = (fb_height + 1) / 2;
+        }
 
         glViewport(x, y, fb_width_half, fb_height_half);
         x += fb_width_half;
@@ -201,7 +207,7 @@ bool Viewer::render()
         gl()->glEnableVertexAttribArray(texcoord_attr);
 
 
-        if (iter->first == "RGB" || iter->first == "registered")
+        if (iter->first == "RGB" || iter->first == "registered" || iter->first == "ONLYRGB")
         {
             renderShader.use();
 

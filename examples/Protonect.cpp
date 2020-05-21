@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
   std::cerr << "Version: " << LIBFREENECT2_VERSION << std::endl;
   std::cerr << "Environment variables: LOGFILE=<protonect.log>" << std::endl;
   std::cerr << "Usage: " << program_path << " [-gpu=<id>] [gl | cl | clkde | cuda | cudakde | cpu] [<device serial>]" << std::endl;
-  std::cerr << "        [-noviewer] [-norgb | -nodepth] [-help] [-version]" << std::endl;
+  std::cerr << "        [-noviewer] [-norgb | -nodepth] [-help] [-version] [-onlyrgb]" << std::endl;
   std::cerr << "        [-frames <number of frames to process>]" << std::endl;
   std::cerr << "To pause and unpause: pkill -USR1 Protonect" << std::endl;
   size_t executable_name_idx = program_path.rfind("Protonect");
@@ -153,6 +153,7 @@ int main(int argc, char *argv[])
 
   bool viewer_enabled = true;
   bool enable_rgb = true;
+  bool only_rgb = false;
   bool enable_depth = true;
   int deviceId = -1;
   size_t framemax = -1;
@@ -242,6 +243,9 @@ int main(int argc, char *argv[])
     else if(arg == "-nodepth" || arg == "--nodepth")
     {
       enable_depth = false;
+    }
+    else if (arg == "-onlyrgb") {
+      only_rgb = true;
     }
     else if(arg == "-frames")
     {
@@ -375,18 +379,23 @@ int main(int argc, char *argv[])
     }
 
 #ifdef EXAMPLES_WITH_OPENGL_SUPPORT
-    if (enable_rgb)
-    {
-      viewer.addFrame("RGB", rgb);
+    if (only_rgb) {
+      viewer.addFrame("ONLYRGB", rgb);
     }
-    if (enable_depth)
-    {
-      viewer.addFrame("ir", ir);
-      viewer.addFrame("depth", depth);
-    }
-    if (enable_rgb && enable_depth)
-    {
-      viewer.addFrame("registered", &registered);
+    else {
+      if (enable_rgb)
+      {
+        viewer.addFrame("RGB", rgb);
+      }
+      else if (enable_depth)
+      {
+        viewer.addFrame("ir", ir);
+        viewer.addFrame("depth", depth);
+      }
+      if (enable_rgb && enable_depth)
+      {
+        viewer.addFrame("registered", &registered);
+      }
     }
 
     protonect_shutdown = protonect_shutdown || viewer.render();
