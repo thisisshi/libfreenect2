@@ -254,3 +254,26 @@ Note: Ubuntu 12.04 is too old to support. Debian jessie may also be too old, and
 * Set up udev rules for device access: `sudo cp ../platform/linux/udev/90-kinect2.rules /etc/udev/rules.d/`, then replug the Kinect.
 * Run the test program: `./bin/Protonect`
 * Run OpenNI2 test (optional): `sudo apt-get install openni2-utils && sudo make install-openni2 && NiViewer2`. Environment variable `LIBFREENECT2_PIPELINE` can be set to `cl`, `cuda`, etc to specify the pipeline.
+
+
+# Modifications
+This is a fork of libfreenect2 with the goal of modifying it to enable webcam support in MacOS.
+Currently, you can use this in conjunction with [obs-mac-virtualcam](https://github.com/johnboiles/obs-mac-virtualcam)
+to enable a virtual webcam on things like Zoom, provided you make some modifications, details
+here:
+
+- https://github.com/johnboiles/obs-mac-virtualcam/issues/4
+- https://github.com/johnboiles/obs-mac-virtualcam/issues/4#issuecomment-612290007
+- https://github.com/johnboiles/obs-mac-virtualcam/issues/4#issuecomment-612152106
+
+Obviously, this is a rather clunky solution-- users need to run 3 different pieces of software:
+1. Libfreenect's Protonect example
+2. Open Broadcast System
+3. obs-mac-virtualcam
+
+In the future, I would like to make all of this seemless, potentially leveraging DriverKit to
+write a working driver without the use of hacks and workarounds.
+
+Currently, video output from the kinect works fine and we're able to get all four outputs, including
+the depth output via infrared. In the future, it would be optimal to utilize this when masking
+people in front of the camera to support better virtual backgrounds.
