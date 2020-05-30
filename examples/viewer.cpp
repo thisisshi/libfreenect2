@@ -4,7 +4,7 @@
 
 Viewer::Viewer() : shader_folder("src/shader/"), 
                    win_width(600),
-                   win_height(400)
+                   win_height(338)
 {
 }
 
